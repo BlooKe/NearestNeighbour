@@ -4,13 +4,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += \
-    ./include
+    include
 
 SOURCES += src/main.c
     
 
-HEADERS +=
+HEADERS += \
+    include/definitions.h
     
 OTHER_FILES += \
-    LICENSE.md \
+    LICENSE \
     README.md
