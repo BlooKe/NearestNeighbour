@@ -23,14 +23,37 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
 #include "definitions.h"
+#include "typedefs.h"
+#include "calculations.h"
+#include "fileread.h"
 
 int main(void)
 {
     int ret=SUCCEED;
     clock_t toc;
+    Data_t *dataset;
+    int datacount = 0;
+    Data_t chdata = { FAIL, THREE, ONE, THREE, ONE, 0.0 };
+    KNearest_t *nearest;
+
     clock_t tic = clock();
 
+    dataset = (Data_t *)malloc(sizeof(*dataset) * 700);
+    memset(dataset, FAIL, sizeof(*dataset)*700);
+
+    nearest = (KNearest_t *)malloc(sizeof(*nearest));
+    memset(nearest, FAIL, sizeof(*nearest));
+
+    ret = readfile(DATAFILE, dataset, &datacount);
+
+    ret = calculateDistances(dataset, chdata);
+
+    ret = getNearest(nearest, dataset);
+
+    printf("%d\n", dataset[nearest->datastruct_id].classname);
 
     toc = clock();
     printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);

@@ -21,14 +21,10 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.          *
  ****************************************************************************/
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#ifndef FILEREAD_H
+#define FILEREAD_H
 
-#define FAIL (-1)
-#define SUCCEED 1
+int readfile(char *file_name, Data_t *datastruct, int *datacount);
+int setValue(Data_t *datastruct, int place, char *value);
 
-#define K 5
-
-#define DATAFILE "/home/blooke/QTprojects/BlooKe-NearestNeighbour/data.txt"
-
-#endif // DEFINITIONS_H
+#endif // FILEREAD_H

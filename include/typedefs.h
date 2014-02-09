@@ -21,14 +21,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.          *
  ****************************************************************************/
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#ifndef TYPEDEFS_H
+#define TYPEDEFS_H
 
-#define FAIL (-1)
-#define SUCCEED 1
+typedef enum { CLASSNAME, LWEIGHT, LDISTANCE, RWEIGHT, RDISTANCE, DATADISTANCE } data_type_t;
 
-#define K 5
+typedef enum {LEFT, BALANCE, RIGHT} class_t;
+typedef enum {NONE, ONE, TWO, THREE, FOUR, FIVE} values_t;
 
-#define DATAFILE "/home/blooke/QTprojects/BlooKe-NearestNeighbour/data.txt"
+typedef struct {
+    int classname;
+    int lweight;
+    int ldistance;
+    int rweight;
+    int rdistance;
+    double datadistance;
+} Data_t;
 
-#endif // DEFINITIONS_H
+typedef struct {
+    int datastruct_id;
+    double distance;
+} KNearest_t;
+
+typedef struct {
+    double left;
+    double balance;
+    double right;
+} Results_t;
+
+#endif // TYPEDEFS_H

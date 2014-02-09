@@ -21,14 +21,59 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.          *
  ****************************************************************************/
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#include <stdio.h>
+#include <math.h>
+#include <stdbool.h>
+#include "definitions.h"
+#include "typedefs.h"
+#include "calculations.h"
 
-#define FAIL (-1)
-#define SUCCEED 1
+int calculateDistances(Data_t *dataset, Data_t data)
+{
+    int ret=SUCCEED;
+    int i;
 
-#define K 5
+    for(i=0; (signed)dataset[i].classname!=FAIL; i++)
+    {
+        dataset[i].datadistance = distance(data, dataset[i]);
+    }
 
-#define DATAFILE "/home/blooke/QTprojects/BlooKe-NearestNeighbour/data.txt"
+    return ret;
+}
 
-#endif // DEFINITIONS_H
+double distance(Data_t a, Data_t b)
+{
+    return sqrt(pow(((double)a.lweight-(double)b.lweight),2) + pow(((double)a.ldistance-(double)b.ldistance),2)
+                + pow(((double)a.rweight-(double)b.rweight),2) +pow(((double)a.rdistance-(double)b.rdistance),2));
+}
+
+int getNearest(KNearest_t *nearest, Data_t *dataset)
+{
+    int ret = SUCCEED;
+    int i,e;
+    bool first = true;
+
+    for(i = 0; (signed)dataset[i].classname != FAIL; i++)
+    {
+        if(!first)
+        {
+//            for(e = 0; (signed)nearest[e].datastruct_id != FAIL; e++)
+//            {
+                if(dataset[i].datadistance < nearest->distance)// && e<=K) Neit!
+                {
+                    nearest->datastruct_id = i;
+                    nearest->distance = dataset[i].datadistance;
+                    //printf("%d, %f \n", nearest[e].datastruct_id, nearest[e].distance);
+                }
+//            }
+        } else
+        {
+            nearest[0].datastruct_id=i;
+            nearest[0].distance = dataset[i].datadistance;
+            first = false;
+            //printf("%d, %f \n", nearest[0].datastruct_id, nearest[0].distance);
+        }
+    }
+
+    return ret;
+}

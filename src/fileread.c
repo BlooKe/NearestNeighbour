@@ -21,14 +21,81 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.          *
  ****************************************************************************/
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "definitions.h"
+#include "typedefs.h"
+#include "fileread.h"
 
-#define FAIL (-1)
-#define SUCCEED 1
+int readfile(char *file_name, Data_t *datastruct, int *datacount)
+{
+    int ret = SUCCEED;
+    char line[12];
+    char *token;
+    FILE *fp;
+    int i;
 
-#define K 5
+    fp = fopen(file_name,"r");
 
-#define DATAFILE "/home/blooke/QTprojects/BlooKe-NearestNeighbour/data.txt"
+    if( fp == NULL )
+    {
+      perror("Error while opening the file.\n");
+      ret = FAIL;
+    }
 
-#endif // DEFINITIONS_H
+    while( fgets(line, 11, fp) != NULL )
+    {
+        token = strtok( line, "," );
+            for(i=0; token != NULL; i++ )
+            {
+                ret = setValue(datastruct, i, token);
+                token = strtok( NULL, "," );
+            }
+        (*datacount)++;
+            datastruct++;
+    }
+
+    fclose(fp);
+    return ret;
+}
+
+
+int setValue(Data_t *datastruct, int place, char *value)
+{
+    int ret = SUCCEED;
+    switch (place) {
+        case CLASSNAME:
+        {
+            if (strcmp("L", value)==0)
+                datastruct->classname=LEFT;
+            else if (strcmp("B", value)==0)
+                datastruct->classname=BALANCE;
+            else if (strcmp("R", value)==0)
+                datastruct->classname=RIGHT;
+        } break;
+        case LWEIGHT:
+        {
+            datastruct->lweight=atoi(value);
+        } break;
+        case LDISTANCE:
+        {
+            datastruct->ldistance=atoi(value);
+        } break;
+        case RWEIGHT:
+        {
+            datastruct->rweight=atoi(value);
+        } break;
+        case RDISTANCE:
+        {
+            datastruct->rdistance=atoi(value);
+        } break;
+        default:
+        {
+            printf("Wrong data type - return FAIL!");
+            ret=FAIL;
+        } break;
+    }
+    return ret;
+}
+
