@@ -44,9 +44,9 @@ typedef struct {
 } KNearest_t;
 
 typedef struct {
-    double left;
-    double balance;
-    double right;
+    int left;
+    int balance;
+    int right;
 } Results_t;
 
 #endif // TYPEDEFS_H

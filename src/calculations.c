@@ -50,28 +50,36 @@ double distance(Data_t a, Data_t b)
 int getNearest(KNearest_t *nearest, Data_t *dataset)
 {
     int ret = SUCCEED;
-    int i,e;
+    int i,e, f=0;
     bool first = true;
 
     for(i = 0; (signed)dataset[i].classname != FAIL; i++)
     {
         if(!first)
         {
-//            for(e = 0; (signed)nearest[e].datastruct_id != FAIL; e++)
-//            {
-                if(dataset[i].datadistance < nearest->distance)// && e<=K) Neit!
+            for(e=0; (signed)nearest[e].datastruct_id != FAIL && e<K; e++)
+            {
+                if(dataset[i].datadistance < nearest[e].distance)
                 {
-                    nearest->datastruct_id = i;
-                    nearest->distance = dataset[i].datadistance;
-                    //printf("%d, %f \n", nearest[e].datastruct_id, nearest[e].distance);
+                    if(f<K)
+                    {
+                        nearest[f].datastruct_id = i;
+                        nearest[f].distance = dataset[i].datadistance;
+                        f++;
+                    }
+                    else
+                    {
+                        nearest[e].datastruct_id = i;
+                        nearest[e].distance = dataset[i].datadistance;
+                        e=K;
+                    }
                 }
-//            }
+            }
         } else
         {
             nearest[0].datastruct_id=i;
             nearest[0].distance = dataset[i].datadistance;
             first = false;
-            //printf("%d, %f \n", nearest[0].datastruct_id, nearest[0].distance);
         }
     }
 

@@ -37,15 +37,17 @@ int main(void)
     Data_t *dataset;
     int datacount = 0;
     Data_t chdata = { FAIL, THREE, ONE, THREE, ONE, 0.0 };
-    KNearest_t *nearest;
+    KNearest_t nearest[5];
+    Results_t results = { 0, 0, 0 };
+
+    int e;
 
     clock_t tic = clock();
 
     dataset = (Data_t *)malloc(sizeof(*dataset) * 700);
     memset(dataset, FAIL, sizeof(*dataset)*700);
 
-    nearest = (KNearest_t *)malloc(sizeof(*nearest));
-    memset(nearest, FAIL, sizeof(*nearest));
+    memset(nearest, FAIL, sizeof(*nearest)*K);
 
     ret = readfile(DATAFILE, dataset, &datacount);
 
@@ -53,7 +55,32 @@ int main(void)
 
     ret = getNearest(nearest, dataset);
 
-    printf("%d\n", dataset[nearest->datastruct_id].classname);
+//    for(e=0; (signed)nearest[e].datastruct_id != FAIL; e++)
+//    {
+//        printf("e:%d - %d, %f: class %d\n",e, nearest[e].datastruct_id, nearest[e].distance, dataset[nearest[e].datastruct_id].classname );
+//    }
+
+    for(e=0; (signed)nearest[e].datastruct_id != FAIL; e++)
+    {
+        switch(dataset[nearest[e].datastruct_id].classname)
+        {
+            case LEFT:
+            {
+                results.left++;
+            } break;
+            case BALANCE:
+            {
+                results.balance++;
+            } break;
+            case RIGHT:
+            {
+                results.right++;
+            } break;
+        }
+    }
+
+    printf("LEFT: %d\t\tBALANCE: %d\tRIGHT: %d\n", results.left, results.balance, results.right);
+
 
     toc = clock();
     printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
